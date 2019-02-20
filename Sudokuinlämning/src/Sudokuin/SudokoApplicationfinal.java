@@ -2,17 +2,27 @@ package Sudokuin;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
 
 public class SudokoApplicationfinal extends Application {
 	
@@ -32,9 +42,16 @@ public class SudokoApplicationfinal extends Application {
 		//set the distance between the nodes
 		gridpane.setHgap(5);
 		gridpane.setVgap(5);
-		gridpane.setStyle("-fx-background-color: #C0C0C0;");
-		
+//		gridpane.setStyle("-fx-background-color: #C0C0C0;");
+//		gridpane.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+//		gridpane.setBackground(new Background(new BackgroundFill(Color.rgb(90, 90, 90), CornerRadii.EMPTY, Insets.EMPTY)));
 		Scene scene = new Scene(root, 495, 600);
+		root.setStyle("-fx-background-color: #B6C1BC;");
+		
+//		gridpane.setBackground(new Background(new BackgroundImage(image,BackgroundRepeat.REPEAT,
+//                BackgroundRepeat.REPEAT,
+//                BackgroundPosition.DEFAULT,
+//                BackgroundSize.DEFAULT)));
 		
 		//Solve button
 		Button solve = new Button("Solve");
@@ -48,7 +65,7 @@ public class SudokoApplicationfinal extends Application {
 		Button clear = new Button("Clear");
 		clear.setStyle("-fx-background-color: red; -fx-text-fill: white;");
 		clear.setOnAction(event -> {
-			//TODO
+			//clear the digits
 		});
 		
 		
@@ -66,6 +83,7 @@ public class SudokoApplicationfinal extends Application {
 			for(int j=0; j<9; j++) {
 		
 			TextField textfield = new TextField();
+			textfield.setAlignment(Pos.CENTER);
 			textfield.setMinHeight(textfield_height);
 			textfield.setMaxHeight(textfield_height);
 			textfield.setMinWidth(textfield_width);
@@ -91,6 +109,164 @@ public class SudokoApplicationfinal extends Application {
 			
 			}
 		}
+		
+		
+		//set the colors for the first box
+		for(int i=0; i<3; i++) {
+			for(int j=0; j< 3; j++) {
+				TextField textfield = new TextField();
+				textfield.setAlignment(Pos.CENTER);
+				textfield.setStyle("-fx-background-radius:10; -fx-background-color:#FF4500;");
+				textfield.setMinHeight(textfield_height);
+				textfield.setMaxHeight(textfield_height);
+				textfield.setMinWidth(textfield_width);
+				textfield.setMaxWidth(textfield_width);
+				gridpane.add(textfield, j, i);
+				textfield.setTextFormatter(new TextFormatter <String>((Change change) ->  {
+					 String newText = change.getControlNewText();
+		                if (newText.length() > 1) 
+		                {
+		                    return null ;
+		                }
+		                else if (newText.matches("[^1-9]"))
+		                {
+		                    return null;
+		                }
+		                else 
+		                {
+		                    return change ;
+		                }
+				}));
+				
+				
+			}
+		}
+		
+		//set the colors for the second box
+		for(int i=0; i<3; i++) {
+			for(int j=6; j< 9; j++) {
+				TextField textfield = new TextField();
+				textfield.setAlignment(Pos.CENTER);
+				textfield.setStyle("-fx-background-radius:10; -fx-background-color:#FF4500;");
+				textfield.setMinHeight(textfield_height);
+				textfield.setMaxHeight(textfield_height);
+				textfield.setMinWidth(textfield_width);
+				textfield.setMaxWidth(textfield_width);
+				gridpane.add(textfield, j, i);
+				textfield.setTextFormatter(new TextFormatter <String>((Change change) ->  {
+					 String newText = change.getControlNewText();
+		                if (newText.length() > 1) 
+		                {
+		                    return null ;
+		                }
+		                else if (newText.matches("[^1-9]"))
+		                {
+		                    return null;
+		                }
+		                else 
+		                {
+		                    return change ;
+		                }
+				}));
+				
+				
+			}
+		}
+		
+		//set the colors for the third box
+				for(int i=3; i<6; i++) {
+					for(int j=3; j< 6; j++) {
+						TextField textfield = new TextField();
+						textfield.setAlignment(Pos.CENTER);
+						textfield.setStyle("-fx-background-radius:10; -fx-background-color:#FF4500;");
+						textfield.setMinHeight(textfield_height);
+						textfield.setMaxHeight(textfield_height);
+						textfield.setMinWidth(textfield_width);
+						textfield.setMaxWidth(textfield_width);
+						gridpane.add(textfield, j, i);
+						textfield.setTextFormatter(new TextFormatter <String>((Change change) ->  {
+							 String newText = change.getControlNewText();
+				                if (newText.length() > 1) 
+				                {
+				                    return null ;
+				                }
+				                else if (newText.matches("[^1-9]"))
+				                {
+				                    return null;
+				                }
+				                else 
+				                {
+				                    return change ;
+				                }
+						}));
+						
+						
+					}
+				}
+				
+		// set the colors for the forth box
+		for (int i = 6; i < 9; i++) {
+			for (int j = 0; j < 3; j++) {
+				TextField textfield = new TextField();
+				textfield.setAlignment(Pos.CENTER);
+				textfield.setStyle("-fx-background-radius:10; -fx-background-color:#FF4500;");
+				textfield.setMinHeight(textfield_height);
+				textfield.setMaxHeight(textfield_height);
+				textfield.setMinWidth(textfield_width);
+				textfield.setMaxWidth(textfield_width);
+				gridpane.add(textfield, j, i);
+				textfield.setTextFormatter(new TextFormatter <String>((Change change) ->  {
+					 String newText = change.getControlNewText();
+		                if (newText.length() > 1) 
+		                {
+		                    return null ;
+		                }
+		                else if (newText.matches("[^1-9]"))
+		                {
+		                    return null;
+		                }
+		                else 
+		                {
+		                    return change ;
+		                }
+				}));
+				
+
+			}
+		}
+		
+		
+		// set the colors for the fifth box
+				for (int i = 6; i < 9; i++) {
+					for (int j = 6; j < 9; j++) {
+						TextField textfield = new TextField();
+						textfield.setAlignment(Pos.CENTER);
+						textfield.setStyle("-fx-background-radius:10; -fx-background-color:#FF4500;");
+						textfield.setMinHeight(textfield_height);
+						textfield.setMaxHeight(textfield_height);
+						textfield.setMinWidth(textfield_width);
+						textfield.setMaxWidth(textfield_width);
+						gridpane.add(textfield, j, i);
+						textfield.setTextFormatter(new TextFormatter <String>((Change change) ->  {
+							 String newText = change.getControlNewText();
+				                if (newText.length() > 1) 
+				                {
+				                    return null ;
+				                }
+				                else if (newText.matches("[^1-9]"))
+				                {
+				                    return null;
+				                }
+				                else 
+				                {
+				                    return change ;
+				                }
+						}));
+						
+
+					}
+				}
+		
 		//get gridpane
 		root.getChildren().add(gridpane);
 		
