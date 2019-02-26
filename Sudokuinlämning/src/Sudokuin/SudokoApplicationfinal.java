@@ -43,17 +43,21 @@ public class SudokoApplicationfinal extends Application {
 		BorderPane root = new BorderPane();
 		root.setStyle("-fx-background-color: #B6C1BC;");
 		GridPane gridpane = new GridPane();
-		
-		//creating a menubar with menu and menu item with a photo
+
+		// creating a menubar with menu and menu item with a photo
 		MenuBar menubar = new MenuBar();
 		Menu menugame = new Menu("Game");
 		MenuItem menuitem = new MenuItem("new game");
 		File pic = new File("/Users/macbook/Desktop/sudoku.png");
 		Image image = new Image(pic.toURI().toString());
-//		menugame.setGraphic(new ImageView(image));
+		menugame.setGraphic(new ImageView(image));
 		menugame.getItems().add(menuitem);
 		menubar.getMenus().add(menugame);
-		
+		// new game will restart/refill the grid
+		menuitem.setOnAction(event -> {
+//			fillrandomly();
+			// TODO
+		});
 
 		// the feedback text
 		Label feedback = new Label(" FEEDBACK!");
@@ -62,13 +66,12 @@ public class SudokoApplicationfinal extends Application {
 		// set the distance between the nodes
 		gridpane.setHgap(5);
 		gridpane.setVgap(5);
-		Scene scene = new Scene(root, 495, 550);
+		Scene scene = new Scene(root, 495, 610);
 //		gridpane.setPrefHeight(200);
 //		gridpane.setPrefWidth(300);
 
-		//fill the grid with random nubers
-		
-		
+		// fill the grid with random nubers
+
 		// fill the grid with white cells
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -76,12 +79,8 @@ public class SudokoApplicationfinal extends Application {
 				mtextfield[i][j] = textfield;
 				Random random = new Random();
 				StringBuilder sb = new StringBuilder();
-//				for (int k = 0; k < 9; k++) {
-					sb.append(random.nextInt(10));
-					mtextfield[i][j].setText(sb.toString());
-					
-//				}
-				
+				sb.append(random.nextInt(9) + 1);
+				mtextfield[i][j].setText(sb.toString());
 				textfield.setStyle("-fx-background-radius:10;");
 				textfield.setAlignment(Pos.CENTER);
 				textfield.setMinHeight(textfield_height);
@@ -142,18 +141,39 @@ public class SudokoApplicationfinal extends Application {
 			}
 		}
 
-		// get gridpane
-		root.getChildren().add(gridpane);
-//		root.getChildren().add(menubar);
-		
+		// get gridpane & menubar
+		root.setCenter(gridpane);
+		root.setTop(menubar);
 
 		// Solve button
 		Button solve = new Button("Solve");
-		solve.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+		solve.setStyle("-fx-background-color: green; -fx-text-fill: white;");
 		solve.setOnAction(event -> {
-//					System.out.println("clicked solve!");
-//					TODO
-			saver();
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					String t = mtextfield[i][j].getText();
+					int tint = Integer.valueOf(t);
+					SudokuSolver.setValue(i, j, tint);
+				}
+			}
+			SudokuSolver sudoku = new SudokuSolver();
+			if (sudoku.solve()) {
+				for (int i = 0; i < 9; i++) {
+					for (int j = 0; j < 9; j++) {
+						int v = sudoku.getValue(i, j);
+						mtextfield[i][j].setText(String.valueOf(v));
+
+					}
+				}
+			} else {
+				Alert b = new Alert(AlertType.INFORMATION);
+				b.setTitle("Unsolvable!");
+				b.setHeaderText("soluation not found");
+				b.setContentText("GIVE IT ANOTHER CHANCE :) ");
+				b.show();
+
+			}
+//			saver();
 		});
 
 		// Clear button: clear the grid and send alert
@@ -168,34 +188,83 @@ public class SudokoApplicationfinal extends Application {
 			}
 			Alert a = new Alert(AlertType.INFORMATION);
 			a.setTitle("CLEARED!");
-			a.setHeaderText("CLEARED SUCCESSED!");
+			a.setHeaderText("cleared successfully!");
 //			a.setContentText("GIVE IT ANOTHER CHANCE :) ");
 			a.show();
 
 		});
-		
-		
 
-		hbox.getChildren().addAll(solve, clear, feedback);
+		// generate button : generate a new sudoku scene.
+		Button generate = new Button("generate");
+		generate.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+//		generate.setDefaultButton(true);
+		generate.setOnAction(event -> {
+			// generate sudoku
+			mtextfield[0][2].setText("4");
+			mtextfield[0][5].setText("9");
+			mtextfield[0][7].setText("6");
+			mtextfield[0][8].setText("2");
+			mtextfield[1][8].setText("5");
+			mtextfield[2][0].setText("1");
+			mtextfield[2][2].setText("2");
+			mtextfield[2][3].setText("5");
+			mtextfield[3][3].setText("2");
+			mtextfield[3][4].setText("1");
+			mtextfield[3][7].setText("9");
+			mtextfield[4][1].setText("5");
+			mtextfield[4][6].setText("6");
+			mtextfield[5][0].setText("6");
+			mtextfield[5][7].setText("2");
+			mtextfield[5][8].setText("8");
+			mtextfield[6][0].setText("4");
+			mtextfield[6][1].setText("1");
+			mtextfield[6][3].setText("6");
+			mtextfield[6][5].setText("8");
+			mtextfield[7][0].setText("8");
+			mtextfield[7][1].setText("6");
+			mtextfield[7][4].setText("3");
+			mtextfield[7][6].setText("1");
+			mtextfield[8][6].setText("4");
+		});
+
+		hbox.getChildren().addAll(solve, clear, generate, feedback);
 		hbox.setPadding(new Insets(15, 15, 10, 5));
 		hbox.setSpacing(15);
+		hbox.setStyle("-fx-background-color: #808080;");
 		root.setBottom(hbox);
-		
-		//Delegate the focus to container so the requestFocus value is null
+
+		// Delegate the focus to container so the requestFocus value is null
 		final BooleanProperty firstTime = new SimpleBooleanProperty(true);
-		mtextfield[0][0].focusedProperty().addListener((observable,  oldValue,  newValue) -> {
-            if(newValue && firstTime.get()){
-                hbox.requestFocus(); // Delegate the focus to container
-                firstTime.setValue(false); // Variable value changed for future references
-            }
-        });
-		
+		mtextfield[0][0].focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue && firstTime.get()) {
+				hbox.requestFocus(); // Delegate the focus to container
+				firstTime.setValue(false); // Variable value changed for future references
+			}
+		});
 
 		primaryStage.setTitle("SUDOKU-GAME");
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.show();
 
+	}
+
+	// method to fill textfields randomly
+	public void fillrandomly() {
+		Random random2 = new Random();
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append(random2.nextInt(9) + 1);
+		int sb2int = Integer.valueOf(sb2.toString());
+		GridPane gridpane = new GridPane();
+
+		for (int i = 0; i < sb2int; i++) {
+			for (int j = 0; j < sb2int; j++) {
+				TextField textfield = new TextField();
+				mtextfield[i][j] = textfield;
+				mtextfield[i][j].setText(sb.toString());
+				gridpane.add(textfield, j, i);
+			}
+		}
 	}
 
 //	// method to fill the grid with random nubers
@@ -211,9 +280,6 @@ public class SudokoApplicationfinal extends Application {
 //			}
 //		}
 //	}
-	
-	
-	
 
 	// read the input from the textfields using input-mapen
 	public void saver() {
