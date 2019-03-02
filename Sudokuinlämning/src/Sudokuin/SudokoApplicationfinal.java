@@ -152,25 +152,35 @@ public class SudokoApplicationfinal extends Application {
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
 					String t = mtextfield[i][j].getText();
-					int tint = Integer.valueOf(t);
-					SudokuSolver.setValue(i, j, tint);
+					int tint;
+					if (t.equals("")) {
+						tint = 0;
+					} else tint = Integer.valueOf(t);
+					
+					SudokuSolver s = new SudokuSolver();
+					s.setValue(i, j, tint);
 				}
 			}
 			SudokuSolver sudoku = new SudokuSolver();
-			if (sudoku.solve()) {
+			if (sudoku.solve(0, 0)) {
 				for (int i = 0; i < 9; i++) {
 					for (int j = 0; j < 9; j++) {
 						int v = sudoku.getValue(i, j);
 						mtextfield[i][j].setText(String.valueOf(v));
-
+						
 					}
 				}
-			} else {
 				Alert b = new Alert(AlertType.INFORMATION);
-				b.setTitle("Unsolvable!");
-				b.setHeaderText("soluation not found");
-				b.setContentText("GIVE IT ANOTHER CHANCE :) ");
+				b.setTitle("Solvable!");
+				b.setHeaderText("soluation found");
+//				b.setContentText("GIVE IT ANOTHER CHANCE :) ");
 				b.show();
+			} else {
+				Alert c = new Alert(AlertType.INFORMATION);
+				c.setTitle("Unsolvable!");
+				c.setHeaderText("soluation not found");
+				c.setContentText("GIVE IT ANOTHER CHANCE :) ");
+				c.show();
 
 			}
 //			saver();
@@ -183,7 +193,7 @@ public class SudokoApplicationfinal extends Application {
 			// clear the digits
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					mtextfield[i][j].setText(null);
+					mtextfield[i][j].setText("");
 				}
 			}
 			Alert a = new Alert(AlertType.INFORMATION);
@@ -200,7 +210,7 @@ public class SudokoApplicationfinal extends Application {
 //		generate.setDefaultButton(true);
 		generate.setOnAction(event -> {
 			// generate sudoku
-			mtextfield[0][2].setText("4");
+			mtextfield[0][2].setText("8");
 			mtextfield[0][5].setText("9");
 			mtextfield[0][7].setText("6");
 			mtextfield[0][8].setText("2");
