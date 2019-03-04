@@ -1,9 +1,11 @@
 package Sudokuin;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.Vector;
 
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
@@ -13,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -32,10 +35,12 @@ public class SudokoApplicationfinal extends Application {
 
 	TextField mtextfield[][] = new TextField[9][9];
 	StringBuilder sb = new StringBuilder();
-	String a[][] = new String[9][9];
-	Map<Map<Integer, Integer>, String> inputsaver = new HashMap<Map<Integer, Integer>, String>();
+//	String a[][] = new String[9][9];
+//	Map<Map<Integer, Integer>, String> inputsaver = new HashMap<Map<Integer, Integer>, String>();
 	private final int textfield_width = 50;
 	private final int textfield_height = 50;
+	Vector<Integer> thumbsupcounter = new Vector<Integer>();
+	Vector<Integer> thumbsdowncounter = new Vector<Integer>();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -47,16 +52,34 @@ public class SudokoApplicationfinal extends Application {
 		// creating a menubar with menu and menu item with a photo
 		MenuBar menubar = new MenuBar();
 		Menu menugame = new Menu("Game");
-		MenuItem menuitem = new MenuItem("new game");
+		MenuItem menuitem1 = new MenuItem("Info");
+		MenuItem menuitem2 = new MenuItem("Exit");
 		File pic = new File("/Users/macbook/Desktop/sudoku.png");
 		Image image = new Image(pic.toURI().toString());
 		menugame.setGraphic(new ImageView(image));
-		menugame.getItems().add(menuitem);
+		menugame.getItems().addAll(menuitem1, menuitem2);
 		menubar.getMenus().add(menugame);
-		// new game will restart/refill the grid
-		menuitem.setOnAction(event -> {
+		// info will show an alert box with info about the game
+		menuitem1.setOnAction(event -> {
+			Alert info = new Alert(AlertType.INFORMATION);
+			info.setTitle("about the game");
+			info.setHeaderText("This game is done by Yamen & Filip");
+			info.setContentText("Sudoku-Game version 1.0 \nHope you enjoy it :)");
+			info.show();
 //			fillrandomly();
-			// TODO
+		});
+		// exit will close the stage after confirmation
+		menuitem2.setOnAction(event -> {
+			Alert exit = new Alert(AlertType.CONFIRMATION);
+			exit.setTitle("Exit the game!");
+			exit.setHeaderText("Are you sure you want to exit the game?");
+			Optional<ButtonType> option = exit.showAndWait();
+			if (option.get() == ButtonType.OK) {
+				primaryStage.close();
+			} else if (option.get() == ButtonType.CANCEL) {
+				exit.close();
+			}
+
 		});
 
 		// the feedback text
@@ -70,7 +93,7 @@ public class SudokoApplicationfinal extends Application {
 //		gridpane.setPrefHeight(200);
 //		gridpane.setPrefWidth(300);
 
-		// fill the grid with random nubers
+		// fill the grid with random numbers
 
 		// fill the grid with white cells
 		for (int i = 0; i < 9; i++) {
@@ -149,25 +172,28 @@ public class SudokoApplicationfinal extends Application {
 		Button solve = new Button("Solve");
 		solve.setStyle("-fx-background-color: green; -fx-text-fill: white;");
 		solve.setOnAction(event -> {
+			SudokuSolver s = new SudokuSolver();
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
 					String t = mtextfield[i][j].getText();
-					int tint;
-					if (t.equals("")) {
-						tint = 0;
-					} else tint = Integer.valueOf(t);
-					
-					SudokuSolver s = new SudokuSolver();
-					s.setValue(i, j, tint);
+//					int tint;
+					if (!t.equals("")) {
+//						tint = 0;
+						s.usersetValue(i, j, Integer.valueOf(t));
+					}
+//					} else tint = Integer.valueOf(t);
+
+//					SudokuSolver s = new SudokuSolver();
+//					s.setValue(i, j, tint);
 				}
 			}
-			SudokuSolver sudoku = new SudokuSolver();
-			if (sudoku.solve(0, 0)) {
+//			SudokuSolver sudoku = new SudokuSolver();
+			if (s.solve(0, 0)) {
 				for (int i = 0; i < 9; i++) {
 					for (int j = 0; j < 9; j++) {
-						int v = sudoku.getValue(i, j);
+						int v = s.getValue(i, j);
 						mtextfield[i][j].setText(String.valueOf(v));
-						
+
 					}
 				}
 				Alert b = new Alert(AlertType.INFORMATION);
@@ -237,9 +263,51 @@ public class SudokoApplicationfinal extends Application {
 			mtextfield[8][6].setText("4");
 		});
 
-		hbox.getChildren().addAll(solve, clear, generate, feedback);
-		hbox.setPadding(new Insets(15, 15, 10, 5));
-		hbox.setSpacing(15);
+		// button thumbs up to give feedback
+		Button thumbsup = new Button("");
+		TextField up = new TextField("0");
+		up.setStyle("-fx-background-radius:10;");
+		up.setAlignment(Pos.CENTER);
+		up.setMinHeight(30);
+		up.setMaxHeight(30);
+		up.setMinWidth(30);
+		up.setMaxWidth(30);
+		File pic2 = new File("/Users/macbook/Desktop/thumbsup.png");
+		Image image2 = new Image(pic2.toURI().toString());
+		thumbsup.setGraphic(new ImageView(image2));
+		thumbsup.setOnAction(event -> {
+			thumbsupcounter.add(1);
+			int a = thumbsupcounter.size();
+//			System.out.println(thumbsupcounter.size());
+			up.setText(Integer.toString(a));
+		});
+
+		
+		
+		// button thumbs down to give feedback
+		Button thumbsdown = new Button("");
+		TextField down = new TextField("0");
+		down.setStyle("-fx-background-radius:10;");
+		down.setAlignment(Pos.CENTER);
+		down.setMinHeight(30);
+		down.setMaxHeight(30);
+		down.setMinWidth(30);
+		down.setMaxWidth(30);
+		File pic3 = new File("/Users/macbook/Desktop/thumbsdown.png");
+		Image image3 = new Image(pic3.toURI().toString());
+		thumbsdown.setGraphic(new ImageView(image3));
+		thumbsdown.setOnAction(event -> {
+			thumbsdowncounter.add(1);
+			int b = thumbsdowncounter.size();
+//			System.out.println(thumbsdowncounter.size());
+			down.setText(Integer.toString(b));
+		});
+
+		
+		
+		hbox.getChildren().addAll(solve, clear, generate, thumbsup, up, thumbsdown, down);
+		hbox.setPadding(new Insets(20, 20, 20, 5));
+		hbox.setSpacing(20);
 		hbox.setStyle("-fx-background-color: #808080;");
 		root.setBottom(hbox);
 
@@ -292,26 +360,26 @@ public class SudokoApplicationfinal extends Application {
 //	}
 
 	// read the input from the textfields using input-mapen
-	public void saver() {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				a[i][j] = mtextfield[i][j].getText();
-//				inputsaver.put(mtextfield[i][j], a[i][j]);
-
-				if (mtextfield[i][j].getText() == null || mtextfield[i][j].getText().trim().isEmpty()) {
-					return;
-////					System.out.println("Empty + (i,j)");
-				} else {
-//					System.out.println(a[i][j] + Integer.valueOf(mtextfield[i][j].getText()));
-					System.out.println(a[i][j]);
-				}
-////					String input = mtextfield[i][j].getText();
-//					inputsaver.put(mtextfield[i][j], mtextfield[i][j].getText());
-//					System.out.println(inputsaver);
-			}
-
-		}
-	}
+//	public void saver() {
+//		for (int i = 0; i < 9; i++) {
+//			for (int j = 0; j < 9; j++) {
+//				a[i][j] = mtextfield[i][j].getText();
+////				inputsaver.put(mtextfield[i][j], a[i][j]);
+//
+//				if (mtextfield[i][j].getText() == null || mtextfield[i][j].getText().trim().isEmpty()) {
+//					return;
+//////					System.out.println("Empty + (i,j)");
+//				} else {
+////					System.out.println(a[i][j] + Integer.valueOf(mtextfield[i][j].getText()));
+//					System.out.println(a[i][j]);
+//				}
+//////					String input = mtextfield[i][j].getText();
+////					inputsaver.put(mtextfield[i][j], mtextfield[i][j].getText());
+////					System.out.println(inputsaver);
+//			}
+//
+//		}
+//	}
 
 	public static void main(String[] args) {
 		Application.launch(args);

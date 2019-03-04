@@ -18,31 +18,31 @@ public class SudokuSolver {
 			}
 		}
 		// generate sudoku
-		setValue(0, 2, 8);
-		setValue(0, 5, 9);
-		setValue(0, 7, 6);
-		setValue(0, 8, 2);
-		setValue(1, 8, 5);
-		setValue(2, 0, 1);
-		setValue(2, 2, 2);
-		setValue(2, 3, 5);
-		setValue(3, 3, 2);
-		setValue(3, 4, 1);
-		setValue(3, 7, 9);
-		setValue(4, 1, 5);
-		setValue(4, 6, 6);
-		setValue(5, 0, 6);
-		setValue(5, 7, 2);
-		setValue(5, 8, 8);
-		setValue(6, 0, 4);
-		setValue(6, 1, 1);
-		setValue(6, 3, 6);
-		setValue(6, 5, 8);
-		setValue(7, 0, 8);
-		setValue(7, 1, 6);
-		setValue(7, 4, 3);
-		setValue(7, 6, 1);
-		setValue(8, 6, 4);
+//		setValue(0, 2, 8);
+//		setValue(0, 5, 9);
+//		setValue(0, 7, 6);
+//		setValue(0, 8, 2);
+//		setValue(1, 8, 5);
+//		setValue(2, 0, 1);
+//		setValue(2, 2, 2);
+//		setValue(2, 3, 5);
+//		setValue(3, 3, 2);
+//		setValue(3, 4, 1);
+//		setValue(3, 7, 9);
+//		setValue(4, 1, 5);
+//		setValue(4, 6, 6);
+//		setValue(5, 0, 6);
+//		setValue(5, 7, 2);
+//		setValue(5, 8, 8);
+//		setValue(6, 0, 4);
+//		setValue(6, 1, 1);
+//		setValue(6, 3, 6);
+//		setValue(6, 5, 8);
+//		setValue(7, 0, 8);
+//		setValue(7, 1, 6);
+//		setValue(7, 4, 3);
+//		setValue(7, 6, 1);
+//		setValue(8, 6, 4);
 	}
 
 	// get the cells value
@@ -63,7 +63,7 @@ public class SudokuSolver {
 	// set the value by user
 	public void usersetValue(int row, int col, int value) {
 		matrixint[row][col] = value;
-		usersnumbers[row][col] = true;
+		usersnumbers[row][col] = !usersnumbers[row][col];
 	}
 
 	// check if a possible number is already in a row
