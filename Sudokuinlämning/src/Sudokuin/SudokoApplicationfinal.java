@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -81,10 +80,6 @@ public class SudokoApplicationfinal extends Application {
 			}
 
 		});
-
-		// the feedback text
-		Label feedback = new Label(" FEEDBACK!");
-		feedback.setStyle("-fx-font: normal bold 15px 'serif' ");
 
 		// set the distance between the nodes
 		gridpane.setHgap(5);
@@ -173,22 +168,19 @@ public class SudokoApplicationfinal extends Application {
 		solve.setStyle("-fx-background-color: green; -fx-text-fill: white;");
 		solve.setOnAction(event -> {
 			SudokuSolver s = new SudokuSolver();
+			Alert c = new Alert(AlertType.INFORMATION);
+
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
 					String t = mtextfield[i][j].getText();
-//					int tint;
 					if (!t.equals("")) {
-//						tint = 0;
 						s.usersetValue(i, j, Integer.valueOf(t));
-					}
-//					} else tint = Integer.valueOf(t);
-
-//					SudokuSolver s = new SudokuSolver();
-//					s.setValue(i, j, tint);
+					} 
 				}
 			}
-//			SudokuSolver sudoku = new SudokuSolver();
-			if (s.solve(0, 0)) {
+//			if (!c.isShowing()) {
+		
+			if (s.solve()) {
 				for (int i = 0; i < 9; i++) {
 					for (int j = 0; j < 9; j++) {
 						int v = s.getValue(i, j);
@@ -199,10 +191,8 @@ public class SudokoApplicationfinal extends Application {
 				Alert b = new Alert(AlertType.INFORMATION);
 				b.setTitle("Solvable!");
 				b.setHeaderText("soluation found");
-//				b.setContentText("GIVE IT ANOTHER CHANCE :) ");
 				b.show();
 			} else {
-				Alert c = new Alert(AlertType.INFORMATION);
 				c.setTitle("Unsolvable!");
 				c.setHeaderText("soluation not found");
 				c.setContentText("GIVE IT ANOTHER CHANCE :) ");
@@ -236,31 +226,32 @@ public class SudokoApplicationfinal extends Application {
 //		generate.setDefaultButton(true);
 		generate.setOnAction(event -> {
 			// generate sudoku
-			mtextfield[0][2].setText("8");
-			mtextfield[0][5].setText("9");
-			mtextfield[0][7].setText("6");
-			mtextfield[0][8].setText("2");
-			mtextfield[1][8].setText("5");
-			mtextfield[2][0].setText("1");
-			mtextfield[2][2].setText("2");
-			mtextfield[2][3].setText("5");
-			mtextfield[3][3].setText("2");
-			mtextfield[3][4].setText("1");
-			mtextfield[3][7].setText("9");
-			mtextfield[4][1].setText("5");
-			mtextfield[4][6].setText("6");
-			mtextfield[5][0].setText("6");
-			mtextfield[5][7].setText("2");
-			mtextfield[5][8].setText("8");
-			mtextfield[6][0].setText("4");
-			mtextfield[6][1].setText("1");
-			mtextfield[6][3].setText("6");
-			mtextfield[6][5].setText("8");
-			mtextfield[7][0].setText("8");
-			mtextfield[7][1].setText("6");
-			mtextfield[7][4].setText("3");
-			mtextfield[7][6].setText("1");
-			mtextfield[8][6].setText("4");
+//			mtextfield[0][2].setText("8");
+//			mtextfield[0][5].setText("9");
+//			mtextfield[0][7].setText("6");
+//			mtextfield[0][8].setText("2");
+//			mtextfield[1][8].setText("5");
+//			mtextfield[2][0].setText("1");
+//			mtextfield[2][2].setText("2");
+//			mtextfield[2][3].setText("5");
+//			mtextfield[3][3].setText("2");
+//			mtextfield[3][4].setText("1");
+//			mtextfield[3][7].setText("9");
+//			mtextfield[4][1].setText("5");
+//			mtextfield[4][6].setText("6");
+//			mtextfield[5][0].setText("6");
+//			mtextfield[5][7].setText("2");
+//			mtextfield[5][8].setText("8");
+//			mtextfield[6][0].setText("4");
+//			mtextfield[6][1].setText("1");
+//			mtextfield[6][3].setText("6");
+//			mtextfield[6][5].setText("8");
+//			mtextfield[7][0].setText("8");
+//			mtextfield[7][1].setText("6");
+//			mtextfield[7][4].setText("3");
+//			mtextfield[7][6].setText("1");
+//			mtextfield[8][6].setText("4");
+			fillrandomly();
 		});
 
 		// button thumbs up to give feedback
@@ -282,8 +273,6 @@ public class SudokoApplicationfinal extends Application {
 			up.setText(Integer.toString(a));
 		});
 
-		
-		
 		// button thumbs down to give feedback
 		Button thumbsdown = new Button("");
 		TextField down = new TextField("0");
@@ -303,8 +292,6 @@ public class SudokoApplicationfinal extends Application {
 			down.setText(Integer.toString(b));
 		});
 
-		
-		
 		hbox.getChildren().addAll(solve, clear, generate, thumbsup, up, thumbsdown, down);
 		hbox.setPadding(new Insets(20, 20, 20, 5));
 		hbox.setSpacing(20);
@@ -333,31 +320,33 @@ public class SudokoApplicationfinal extends Application {
 		StringBuilder sb2 = new StringBuilder();
 		sb2.append(random2.nextInt(9) + 1);
 		int sb2int = Integer.valueOf(sb2.toString());
-		GridPane gridpane = new GridPane();
+//		GridPane gridpane = new GridPane();
+		
+		
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+//				TextField textfield = new TextField();
+//				mtextfield[i][j] = textfield;
+				mtextfield[i][j].setText(sb2.toString());
+//				gridpane.add(textfield, j, i);
+			}
+		}
+//		root.setCenter(gridpane);
+	}
 
-		for (int i = 0; i < sb2int; i++) {
-			for (int j = 0; j < sb2int; j++) {
-				TextField textfield = new TextField();
-				mtextfield[i][j] = textfield;
+	// method to fill the grid with random nubers
+	public void fill() {
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder();
+		for (int k = 0; k < 12; k++) {
+			sb.append(random.nextInt(10));
+		}
+		for(int i =0; i <9; i++) {
+			for(int j = 0; j< 9; j++) {
 				mtextfield[i][j].setText(sb.toString());
-				gridpane.add(textfield, j, i);
 			}
 		}
 	}
-
-//	// method to fill the grid with random nubers
-//	public void fill() {
-//		Random random = new Random();
-//		StringBuilder sb = new StringBuilder();
-//		for (int k = 0; k < 12; k++) {
-//			sb.append(random.nextInt(10));
-//		}
-//		for(int i =0; i <9; i++) {
-//			for(int j = 0; j< 9; j++) {
-//				mtextfield[i][j].setText(sb.toString());
-//			}
-//		}
-//	}
 
 	// read the input from the textfields using input-mapen
 //	public void saver() {
