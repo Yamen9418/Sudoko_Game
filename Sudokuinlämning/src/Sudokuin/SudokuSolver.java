@@ -99,11 +99,11 @@ public class SudokuSolver {
 
 	// check if a number possible to a row,col position is ok
 	public boolean isOk(int row, int col, int number) {
-		return !isInRow(row,col, number) && !isInCol(row, col, number) && !isInBox(row, col, number);
+		return !isInRow(row, col, number) && !isInCol(row, col, number) && !isInBox(row, col, number);
 	}
-	
+
 	public boolean solve() {
-		return solve(0,0);
+		return solve(0, 0);
 	}
 
 	private boolean solve(int row, int col) {
@@ -114,8 +114,7 @@ public class SudokuSolver {
 		if (row >= 9) {
 			return true;
 		}
-//		for (row = 0; row < Size; row++) {
-//			for (col = 0; col < Size; col++) {
+
 		if (matrixint[row][col] == Empty) {
 			// try possible numbers
 			for (int number = 1; number <= Size; number++) {
@@ -128,10 +127,7 @@ public class SudokuSolver {
 					} else { // if not a solution, empty the cell and continue
 						matrixint[row][col] = Empty;
 					}
-//						}
-//					}
 
-					
 				}
 			}
 			return false;
@@ -140,35 +136,8 @@ public class SudokuSolver {
 				return solve(row, col + 1);
 			}
 		}
-		return false; // sudoku solved
+		return false;
 	}
-
-//	public boolean solve() {
-//		for (int row = 0; row < Size; row++) {
-//			for (int col = 0; col < Size; col++) {
-//				// search for an Empty cell
-//				if (matrixint[row][col] == Empty) {
-//					// try possible numbers
-//					for (int number = 1; number <= Size; number++) {
-//						if (isOk(row, col, number)) {
-//							// number ok. it respects sudoku constraints
-//							matrixint[row][col] = number;
-//
-//							if (solve(row, col)) { // start backtracking recursively
-//								return true;
-//							} else { // if not a solution, empty the cell and continue
-//								matrixint[row][col] = Empty;
-//							}
-//						}
-//					}
-//
-//					return false;
-//				}
-//			}
-//		}
-//
-//		return true; // sudoku solved
-//	}
 
 	// see the sudoku in the terminal
 	public void display() {
