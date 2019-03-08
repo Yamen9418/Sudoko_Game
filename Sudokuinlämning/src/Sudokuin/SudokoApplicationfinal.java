@@ -37,7 +37,6 @@ public class SudokoApplicationfinal extends Application {
 	private int counter = 0;
 	private long count;
 	private boolean playing;
-//	private Label label = new Label("Count: ");
 	TextField mtextfield[][] = new TextField[9][9];
 	MediaPlayer mediaPlayer1;
 	private final int textfield_width = 50;
@@ -240,7 +239,6 @@ public class SudokoApplicationfinal extends Application {
 		// generate button : generate a new sudoku scene.
 		Button generatehard = new Button("Hard Sudoku");
 		generatehard.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-//		generate.setDefaultButton(true);
 		generatehard.setOnAction(event -> {
 			// generate an empty sudoku
 			for (int i = 0; i < 9; i++) {
@@ -284,11 +282,6 @@ public class SudokoApplicationfinal extends Application {
 		Button generateeasy = new Button("Easy Sudoku");
 		generateeasy.setStyle("-fx-background-color: darkblue; -fx-text-fill: white;");
 		generateeasy.setOnAction(event -> {
-//			for (int i = 0; i < 9; i++) {
-//				for (int j = 0; j < 9; j++) {
-//					mtextfield[i][j].setText("");
-//				}
-//			}
 			String easysudoku = "gameon.wav";
 			Media easysudokusound = new Media(new File(easysudoku).toURI().toString());
 			MediaPlayer mediaPlayer4 = new MediaPlayer(easysudokusound);
@@ -340,15 +333,12 @@ public class SudokoApplicationfinal extends Application {
 			down.setText(Integer.toString(b));
 		});
 
-//		HBox hbox2 = new HBox();
-//		hbox2.getChildren().add(label);
+
 		hbox.getChildren().addAll(solve, clear, generateeasy, generatehard, thumbsup, up, thumbsdown, down);
-//		label.relocate(0, 0);
 		hbox.setPadding(new Insets(20, 20, 20, 5));
 		hbox.setSpacing(3);
 		hbox.setStyle("-fx-background-color: #808080;");
 		root.setBottom(hbox);
-//		root.setTop(hbox2);
 
 		// Delegate the focus to container so the requestFocus value is null
 		final BooleanProperty firstTime = new SimpleBooleanProperty(true);
@@ -416,7 +406,12 @@ public class SudokoApplicationfinal extends Application {
 		}
 
 	}
-
+	
+	
+	/** check the status of a mediaplayer.
+	 * 
+	 * @return true if the mediaplayer is playing, else false.
+	 */
 	public boolean isplaying() {
 		Status status = mediaPlayer1.getStatus();
 		if (status == Status.STOPPED) {
@@ -425,7 +420,9 @@ public class SudokoApplicationfinal extends Application {
 		return true;
 	}
 
-	// method to fill textfields randomly
+	/** Fill the textfields randomly.
+	 * 
+	 */
 	public void fillrandomly() {
 		Random random2 = new Random();
 		StringBuilder sb2 = new StringBuilder();
@@ -443,6 +440,7 @@ public class SudokoApplicationfinal extends Application {
 		}
 	}
 
+	
 	public static void main(String[] args) {
 		Application.launch(args);
 
